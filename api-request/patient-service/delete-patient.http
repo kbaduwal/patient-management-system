@@ -1,0 +1,3 @@
+### Delete request to delete a patient
+DELETE https://localhost:4000/patients/{id}
+###

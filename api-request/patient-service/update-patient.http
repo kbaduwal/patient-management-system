@@ -1,0 +1,14 @@
+### UPDATE an existing patient entity
+PUT https://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000
+id=>123e4567-e89b-12d3-a456-426614174000
+
+Content-Type: application/json
+
+{
+  "name": "Baduwan WIck",
+  "email": "wick@baduwal.com",
+  "address": "123 main street",
+  "dateOfBirth": "1999-09-04",
+  "registeredDate": "2026-02-10"
+}
+###P
