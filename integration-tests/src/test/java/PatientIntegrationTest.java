@@ -6,19 +6,14 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class AuthIntegrationTest {
-
+public class PatientIntegrationTest {
     @BeforeAll
     static void setUp(){
         RestAssured.baseURI = "http://localhost:4004";
     }
 
     @Test
-    public void shouldReturnOKWithValidToken(){
-        // 1. Arrange
-        // 2. Act
-        // 3. Assert
-
+    public void shouldReturnPatientsWithValidToken(){
         String loginPayload = """
                     {
                         "email":"testuser@test.com",
@@ -26,7 +21,7 @@ public class AuthIntegrationTest {
                     }
                 """;
 
-        Response response = given()
+        String token = given()
                 .contentType("application/json")
                 .body(loginPayload)
                 .when()
@@ -35,29 +30,17 @@ public class AuthIntegrationTest {
                 .statusCode(200)
                 .body("token",notNullValue())
                 .extract()
-                .response();
+                .response()
+                .jsonPath()
+                .get("token");
 
-        System.out.println("Generated Token: "+response.jsonPath().getString("token"));
-    }
-
-    @Test
-    public void shouldReturnUnauthorizedOnValidLogin(){
-        // 1. Arrange
-        // 2. Act
-        // 3. Assert
-        String loginPayload = """
-                    {
-                        "email":"invalid_user@test.com",
-                        "password":"wrongpassword"
-                    }
-                """;
-
-        given().contentType("application/json")
-                .body(loginPayload)
+        given()
+                .header("Authorization","Bearer "+ token)
                 .when()
-                .post("/auth/login")
+                .get("/api/patients")
                 .then()
-                .statusCode(401);
+                .statusCode(200)
+                .body("patients",notNullValue());
 
     }
 
